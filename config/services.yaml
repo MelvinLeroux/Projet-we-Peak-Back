@@ -1,0 +1,61 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+imports:
+    - { resource: parameters.yaml }
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+    App\Services\UserService:
+        arguments:
+            $thumbnailDirectory: '%kernel.project_dir%/public/images/profiles/'
+            
+    App\Services\ActivityService:
+        arguments:
+            $activityThumbnailDirectory: '%kernel.project_dir%/public/images/activities/'
+
+    App\Services\ParticipationService:
+        arguments:
+            $activityThumbnailDirectory: '%kernel.project_dir%/public/images/activities/'
+    App\services\ActivityListByFilterService:
+        autowire: true
+        arguments:
+            $activityRepository: '@App\Repository\ActivityRepository'
+            $entityManager: '@doctrine.orm.entity_manager'
+    App\Services\PicturesService:
+        arguments:
+            $pictureDirectory: '%pictureDirectory%'
+    App\Services\CommentService:
+        arguments:
+            $commentDirectory: '%kernel.project_dir%/Repository/CommentRepository'
+        autowire: true
+    App\EventListener\JWTCreatedListener:
+        class: App\EventListener\JWTCreatedListenerPhpListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
+    App\Command\UpdateActivitiesCommandPhpCommand:
+        tags: ['console.command']
+        arguments:
+            $entityManager: '@doctrine.orm.entity_manager'
+    App\EventListener\ParticipationRemoveListener:
+        tags:
+            - { name: doctrine.event_listener, event: preUpdate, entity: App\Entity\Activity }
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+
+    

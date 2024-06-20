@@ -1,0 +1,5 @@
+# config/parameters.yaml
+parameters:
+    thumbnailDirectory: '%kernel.project_dir%/public/images/profiles/'
+    activityThumbnailDirectory: '%kernel.project_dir%/public/images/activities/'
+    pictureDirectory: '%kernel.project_dir%/public/images/pictures/'

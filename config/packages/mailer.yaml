@@ -1,0 +1,3 @@
+framework:
+    mailer:
+        dsn: mailjet+smtp://abcd0e0d0db3912bc17352fc0330302b:f60bf1913100b882ac0181826de8f6cd@default

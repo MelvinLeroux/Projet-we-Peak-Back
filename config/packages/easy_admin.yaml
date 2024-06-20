@@ -1,0 +1,11 @@
+easy_admin:
+  entities:
+    Sport:
+      class: App\Entity\Sport
+      form:
+        fields:
+          - 'name'
+          - 'description'
+          - 'label'
+          - { property: 'difficulties', type: 'collection' }
+          - { property: 'newDifficulties', type: 'collection' }

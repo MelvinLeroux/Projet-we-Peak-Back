@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+            {% block css %}
+                <link rel="stylesheet" href="{{ absolute_url(asset('assets/css/app.css')) }}">
+            {% endblock %}
+
+            {% block body %}
+            <main class="Login">
+            <img src="{{ absolute_url(asset('assets/images/Logo_BW.png')) }}" alt="Logo WePeak" class="Login-content-logo" />
+
+
+
+            <h1>Bonjour ! Merci de rejoindre l'aventure Wepeak</h1>
+
+            <p>
+                Merci de bien vouloir confirmer votre profil en cliquant sur le lien suivant : <br><br>
+                <a href="{{ signedUrl|raw }}">Confirmer mon adresse mail</a>.
+                Ce lien expirera dans  {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
+            </p>
+
+            <p>
+                A bientôt en rando!
+            </p>
+            </main>
+
+            {% endblock %}

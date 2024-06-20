@@ -1,0 +1,97 @@
+doctrine:
+    dbal:
+        url: '%env(resolve:DATABASE_URL)%'
+
+        # IMPORTANT: You MUST configure your server version,
+        # either here or in the DATABASE_URL env var (see .env file)
+        #server_version: '16'
+
+        profiling_collect_backtrace: '%kernel.debug%'
+        use_savepoints: true
+    orm:
+        auto_generate_proxy_classes: true
+        enable_lazy_ghost_objects: true
+        report_fields_where_declared: true
+        validate_xml_mapping: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        auto_mapping: true
+        mappings:
+            App:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Entity'
+                prefix: 'App\Entity'
+                alias: App
+        controller_resolver:
+            auto_mapping: false
+        dql:
+            datetime_functions:
+                date: DoctrineExtensions\Query\Mysql\Date
+                date_format: DoctrineExtensions\Query\Mysql\DateFormat
+                dateadd: DoctrineExtensions\Query\Mysql\DateAdd
+                datediff: DoctrineExtensions\Query\Mysql\DateDiff
+                day: DoctrineExtensions\Query\Mysql\Day
+                dayname: DoctrineExtensions\Query\Mysql\DayName
+                dayofweek: DoctrineExtensions\Query\Mysql\DayOfWeek
+                dayofyear: DoctrineExtensions\Query\Mysql\DayOfYear
+                hour: DoctrineExtensions\Query\Mysql\Hour
+                minute: DoctrineExtensions\Query\Mysql\Minute
+                month: DoctrineExtensions\Query\Mysql\Month
+                monthname: DoctrineExtensions\Query\Mysql\MonthName
+                quarter: DoctrineExtensions\Query\Mysql\Quarter
+                second: DoctrineExtensions\Query\Mysql\Second
+                time: DoctrineExtensions\Query\Mysql\Time
+                timestampadd: DoctrineExtensions\Query\Mysql\TimestampAdd
+                timestampdiff: DoctrineExtensions\Query\Mysql\TimestampDiff
+                week: DoctrineExtensions\Query\Mysql\Week
+                year: DoctrineExtensions\Query\Mysql\Year
+            numeric_functions:
+                acos: DoctrineExtensions\Query\Mysql\Acos
+                asin: DoctrineExtensions\Query\Mysql\Asin
+                atan2: DoctrineExtensions\Query\Mysql\Atan2
+                atan: DoctrineExtensions\Query\Mysql\Atan
+                cos: DoctrineExtensions\Query\Mysql\Cos
+                cot: DoctrineExtensions\Query\Mysql\Cot
+                degrees: DoctrineExtensions\Query\Mysql\Degrees
+                radians: DoctrineExtensions\Query\Mysql\Radians
+                sin: DoctrineExtensions\Query\Mysql\Sin
+                tan: DoctrineExtensions\Query\Mysql\Tan
+                conv: DoctrineExtensions\Query\Mysql\Conv
+                crc32: DoctrineExtensions\Query\Mysql\Crc32
+                sign: DoctrineExtensions\Query\Mysql\Sign
+                round: DoctrineExtensions\Query\Mysql\Round
+                rand: DoctrineExtensions\Query\Mysql\Rand
+                pow: DoctrineExtensions\Query\Mysql\Pow
+                exp: DoctrineExtensions\Query\Mysql\Exp
+                ln: DoctrineExtensions\Query\Mysql\Ln
+                log: DoctrineExtensions\Query\Mysql\Log
+                log10: DoctrineExtensions\Query\Mysql\Log10
+                sqrt: DoctrineExtensions\Query\Mysql\Sqrt
+                ceil: DoctrineExtensions\Query\Mysql\Ceil
+                floor: DoctrineExtensions\Query\Mysql\Floor
+
+when@test:
+    doctrine:
+        dbal:
+            # "TEST_TOKEN" is typically set by ParaTest
+            dbname_suffix: '_test%env(default::TEST_TOKEN)%'
+
+when@prod:
+    doctrine:
+        orm:
+            auto_generate_proxy_classes: false
+            proxy_dir: '%kernel.build_dir%/doctrine/orm/Proxies'
+            query_cache_driver:
+                type: pool
+                pool: doctrine.system_cache_pool
+            result_cache_driver:
+                type: pool
+                pool: doctrine.result_cache_pool
+
+    framework:
+        cache:
+            pools:
+                doctrine.result_cache_pool:
+                    adapter: cache.app
+                doctrine.system_cache_pool:
+                    adapter: cache.system
